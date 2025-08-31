@@ -1,0 +1,51 @@
+using UnityEngine;
+
+/// <summary>
+/// Generic class for implementing Singleton Monobehavior
+/// Usage : Héritance
+/// Goal : make a singleton accessible like <c>Instance</c>.
+/// </summary>
+/// <typeparam name="T">
+/// MonoBehaviour component type to instanciate as singleton.
+/// </typeparam>
+public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+{
+    private static T _instance;
+    private static object _lock = new object();
+
+    public static T Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = (T)FindAnyObjectByType(typeof(T));
+
+                if (_instance == null)
+                {
+                    var singletonObject = new GameObject();
+                    _instance = singletonObject.AddComponent<T>();
+                    singletonObject.name = typeof(T).ToString() + " (Singleton)";
+                }
+
+            }
+
+            return _instance;
+        }
+    }
+
+    protected virtual void Awake()
+    {
+        lock (_lock)
+        {
+            if (_instance == null)
+            {
+                _instance = this as T;
+            }
+            else if (_instance != this)
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
+}
