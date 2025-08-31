@@ -1,0 +1,15 @@
+using UnityEngine;
+
+/// <summary>
+/// Generic class for implementing persistance
+/// Usage : Héritance
+/// Goal : Make MonoBehavior that do not destroy.
+/// </summary>
+
+public abstract class PersistentMonoBehaviour : MonoBehaviour
+{
+    protected virtual void Awake()
+    {
+        DontDestroyOnLoad(gameObject); // Rend l’objet persistant entre les scènes
+    }
+}
